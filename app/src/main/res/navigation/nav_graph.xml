@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_dashboard">
+
+    <fragment
+        android:id="@+id/nav_dashboard"
+        android:name="com.autoresponder.app.ui.dashboard.DashboardFragment"
+        android:label="@string/nav_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/nav_platforms"
+        android:name="com.autoresponder.app.ui.platforms.PlatformsFragment"
+        android:label="@string/nav_platforms"
+        tools:layout="@layout/fragment_platforms" />
+
+    <fragment
+        android:id="@+id/nav_ai_config"
+        android:name="com.autoresponder.app.ui.aiconfig.AIConfigFragment"
+        android:label="@string/nav_ai_config"
+        tools:layout="@layout/fragment_ai_config" />
+
+    <fragment
+        android:id="@+id/nav_preset_replies"
+        android:name="com.autoresponder.app.ui.presetreplies.PresetRepliesFragment"
+        android:label="Preset Replies"
+        tools:layout="@layout/fragment_preset_replies" />
+
+    <fragment
+        android:id="@+id/nav_history"
+        android:name="com.autoresponder.app.ui.history.HistoryFragment"
+        android:label="@string/nav_history"
+        tools:layout="@layout/fragment_history" />
+
+    <activity
+        android:id="@+id/nav_settings"
+        android:name="com.autoresponder.app.ui.settings.SettingsActivity"
+        android:label="@string/nav_settings" />
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.autoresponder.app.ui.about.AboutFragment"
+        android:label="@string/menu_about"
+        tools:layout="@layout/fragment_about" />
+
+</navigation>
+

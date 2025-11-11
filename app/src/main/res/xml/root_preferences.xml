@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/general_settings">
+
+        <SwitchPreferenceCompat
+            app:key="is_bot_enabled"
+            app:title="Enable Auto-Reply"
+            app:summaryOff="Auto-reply is disabled"
+            app:summaryOn="Auto-reply is enabled"
+            app:defaultValue="true" />
+
+        <EditTextPreference
+            app:key="default_reply_message"
+            app:title="Default Reply Message"
+            app:defaultValue="@string/default_reply_message"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="is_group_reply_enabled"
+            app:title="Group Reply"
+            app:summaryOff="Bot will not reply to group messages"
+            app:summaryOn="Bot will reply to group messages"
+            app:defaultValue="false" />
+
+        <EditTextPreference
+            app:key="reply_prefix_message"
+            app:title="Reply Prefix"
+            app:defaultValue="@string/default_reply_prefix"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="max_reply"
+            app:title="Max Replies Per Person/Day"
+            app:defaultValue="100"
+            app:inputType="number"
+            app:useSimpleSummaryProvider="true" />
+
+        <SwitchPreferenceCompat
+            app:key="is_natural_delay_enabled"
+            app:title="Natural Reply Delay"
+            app:summaryOff="Replies sent instantly"
+            app:summaryOn="Replies have natural delay based on message length"
+            app:defaultValue="true" />
+
+        <EditTextPreference
+            app:key="custom_delay_seconds"
+            app:title="Custom Delay (seconds)"
+            app:summary="Fixed delay for all replies (leave empty for natural delay)"
+            app:defaultValue=""
+            app:inputType="numberDecimal"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+
+</PreferenceScreen>
+
