@@ -66,13 +66,6 @@ class GeminiReplyGenerator(
                     // A common pattern is to include it in the prompt.
                     
                     val prompt = "$systemInstruction\n\nMost recent message from $sender: $message"
-
-                    launch(Dispatchers.Main) {
-                         // We need to run the suspend function in a coroutine
-                         // But generateReply is already in IO scope. 
-                         // We can't call suspend function from non-suspend context if we were not in a coroutine.
-                         // But we are in CoroutineScope(Dispatchers.IO).launch
-                    }
                     
                     // Since generateContent is a suspend function, we need to call it within the scope.
                     val response = chat.sendMessage(prompt)
