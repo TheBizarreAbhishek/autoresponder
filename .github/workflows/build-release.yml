@@ -25,7 +25,7 @@ jobs:
       uses: android-actions/setup-android@v3
       
     - name: Setup Gradle
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.2'
         
@@ -36,12 +36,12 @@ jobs:
         fi
         chmod +x gradlew
       
-    - name: Build Release APK
-      run: ./gradlew assembleRelease --no-daemon
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug --no-daemon
       
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-release
-        path: app/build/outputs/apk/release/app-release.apk
+        name: app-debug
+        path: app/build/outputs/apk/debug/app-debug.apk
         retention-days: 90
