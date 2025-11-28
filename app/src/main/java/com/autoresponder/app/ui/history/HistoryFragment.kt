@@ -100,15 +100,19 @@ class HistoryFragment : Fragment() {
     }
 
     private fun showMessageDetails(message: Message) {
-        // Show message details in a dialog
         val dialogView = layoutInflater.inflate(R.layout.dialog_message_details, null)
-        // TODO: Implement message details dialog if needed
-        // For now, just show a toast
-        Toast.makeText(
-            requireContext(),
-            "Message: ${message.message}\nReply: ${message.reply}",
-            Toast.LENGTH_LONG
-        ).show()
+        
+        dialogView.findViewById<android.widget.TextView>(R.id.detailSender).text = message.sender
+        dialogView.findViewById<android.widget.TextView>(R.id.detailPlatform).text = message.platform.replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() }
+        dialogView.findViewById<android.widget.TextView>(R.id.detailMessage).text = message.message
+        dialogView.findViewById<android.widget.TextView>(R.id.detailReply).text = message.reply
+        dialogView.findViewById<android.widget.TextView>(R.id.detailTimestamp).text = message.timestamp
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Message Details")
+            .setView(dialogView)
+            .setPositiveButton(R.string.ok, null)
+            .show()
     }
 
     private fun showManageHistoryDialog() {

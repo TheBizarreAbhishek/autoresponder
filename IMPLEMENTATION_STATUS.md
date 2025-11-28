@@ -28,7 +28,7 @@
 
 ### AI Integration
 - ✅ ChatGPT reply generator (fully implemented)
-- ⏳ Gemini reply generator (placeholder - needs implementation)
+- ✅ Gemini reply generator (implemented)
 - ⏳ DeepSeek reply generator (placeholder - needs implementation)
 - ⏳ Custom API reply generator (placeholder - needs implementation)
 
@@ -41,13 +41,14 @@
 ## ⏳ Pending Implementation
 
 ### AI Generators
-1. **GeminiReplyGenerator.kt** - Port from Java version
-2. **DeepSeekReplyGenerator.kt** - Port from Java version
-3. **CustomReplyGenerator.kt** - Port from Java version
-4. **OllamaReplyGenerator.kt** - Port from Java version (if needed)
+1. **DeepSeekReplyGenerator.kt** - Port from Java version
+2. **CustomReplyGenerator.kt** - Port from Java version
+3. **OllamaReplyGenerator.kt** - Port from Java version (if needed)
 
 ### UI Enhancements
-1. **History Fragment** - Implement RecyclerView with chat history
+1. **Statistics** - Enhance dashboard stats display
+2. **Platform Icons** - Add platform-specific icons
+3. **Dark Mode** - Ensure proper dark mode support
 2. **Statistics** - Enhance dashboard stats display
 3. **Platform Icons** - Add platform-specific icons
 4. **Dark Mode** - Ensure proper dark mode support

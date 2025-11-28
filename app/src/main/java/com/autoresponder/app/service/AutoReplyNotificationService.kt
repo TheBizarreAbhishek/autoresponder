@@ -230,9 +230,8 @@ class AutoReplyNotificationService : NotificationListenerService() {
     }
 
     private fun generateGeminiReply(sender: String, message: String, platform: String, callback: (String) -> Unit) {
-        // TODO: Implement Gemini reply generation - for now use default
-        val defaultReply = sharedPreferences.getString("default_reply_message", getString(R.string.default_reply_message)) ?: ""
-        callback(defaultReply)
+        val generator = com.autoresponder.app.api.GeminiReplyGenerator(this, sharedPreferences, messageHandler)
+        generator.generateReply(sender, message, platform, callback)
     }
 
     private fun generateDeepSeekReply(sender: String, message: String, platform: String, callback: (String) -> Unit) {
