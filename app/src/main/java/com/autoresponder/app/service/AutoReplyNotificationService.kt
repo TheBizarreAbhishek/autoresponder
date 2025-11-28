@@ -317,8 +317,8 @@ class AutoReplyNotificationService : NotificationListenerService() {
             length <= 100 -> (2000 + ((length - 20) * 25)).toLong()
             else -> {
                 val delay = 4000 + ((length - 100) * 40)
-                if (delay > 8000) 8000 else delay
-            }.toLong()
+                (if (delay > 8000) 8000 else delay).toLong()
+            }
         }.coerceAtLeast(1000)
     }
 

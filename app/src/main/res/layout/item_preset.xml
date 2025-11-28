@@ -54,21 +54,23 @@
 
             </LinearLayout>
 
-            <com.google.android.material.iconbutton.IconButton
+            <ImageButton
                 android:id="@+id/edit_preset_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_edit"
-                app:iconTint="@color/primary"
-                android:contentDescription="Edit" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Edit"
+                app:tint="@color/primary" />
 
-            <com.google.android.material.iconbutton.IconButton
+            <ImageButton
                 android:id="@+id/delete_preset_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_delete"
-                app:iconTint="@android:color/holo_red_dark"
-                android:contentDescription="Delete" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Delete"
+                app:tint="@android:color/holo_red_dark" />
 
         </LinearLayout>
 
