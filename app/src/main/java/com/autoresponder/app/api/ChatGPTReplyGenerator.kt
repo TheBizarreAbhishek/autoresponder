@@ -37,54 +37,56 @@ class ChatGPTReplyGenerator(
 
     fun generateReply(sender: String, message: String, platform: String, callback: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            messageHandler.getMessagesHistory(sender, platform) { messages ->
-                val chatHistory = getChatHistory(messages)
-                
-                try {
-                    val jsonBody = buildRequest(sender, message, chatHistory)
-                    val client = OkHttpClient.Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .writeTimeout(30, TimeUnit.SECONDS)
-                        .build()
+            messageHandler.getMessagesHistory(sender, platform, object : MessageHandler.OnMessagesRetrievedListener {
+                override fun onMessagesRetrieved(messages: List<Message>) {
+                    val chatHistory = getChatHistory(messages)
+                    
+                    try {
+                        val jsonBody = buildRequest(sender, message, chatHistory)
+                        val client = OkHttpClient.Builder()
+                            .connectTimeout(30, TimeUnit.SECONDS)
+                            .readTimeout(30, TimeUnit.SECONDS)
+                            .writeTimeout(30, TimeUnit.SECONDS)
+                            .build()
 
-                    val mediaType = "application/json; charset=utf-8".toMediaType()
-                    val requestBody = RequestBody.create(mediaType, jsonBody.toString())
+                        val mediaType = "application/json; charset=utf-8".toMediaType()
+                        val requestBody = RequestBody.create(mediaType, jsonBody.toString())
 
-                    val request = Request.Builder()
-                        .url(API_URL)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer $apiKey")
-                        .post(requestBody)
-                        .build()
+                        val request = Request.Builder()
+                            .url(API_URL)
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", "Bearer $apiKey")
+                            .post(requestBody)
+                            .build()
 
-                    client.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call, e: java.io.IOException) {
-                            Log.e(TAG, "onFailure: ", e)
-                            callback(defaultReplyMessage)
-                        }
-
-                        override fun onResponse(call: Call, response: Response) {
-                            if (!response.isSuccessful) {
-                                Log.d(TAG, "onResponse: ${response.code}")
-                                callback(defaultReplyMessage)
-                                return
-                            }
-
-                            val body = response.body?.string()
-                            if (body != null) {
-                                val reply = parseResponse(body)
-                                callback(reply ?: defaultReplyMessage)
-                            } else {
+                        client.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: java.io.IOException) {
+                                Log.e(TAG, "onFailure: ", e)
                                 callback(defaultReplyMessage)
                             }
-                        }
-                    })
-                } catch (e: Exception) {
-                    Log.e(TAG, "generateReply: ", e)
-                    callback(defaultReplyMessage)
+
+                            override fun onResponse(call: Call, response: Response) {
+                                if (!response.isSuccessful) {
+                                    Log.d(TAG, "onResponse: ${response.code}")
+                                    callback(defaultReplyMessage)
+                                    return
+                                }
+
+                                val body = response.body?.string()
+                                if (body != null) {
+                                    val reply = parseResponse(body)
+                                    callback(reply ?: defaultReplyMessage)
+                                } else {
+                                    callback(defaultReplyMessage)
+                                }
+                            }
+                        })
+                    } catch (e: Exception) {
+                        Log.e(TAG, "generateReply: ", e)
+                        callback(defaultReplyMessage)
+                    }
                 }
-            }
+            })
         }
     }
 

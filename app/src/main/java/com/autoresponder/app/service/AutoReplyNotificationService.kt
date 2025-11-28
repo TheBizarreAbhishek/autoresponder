@@ -119,19 +119,21 @@ class AutoReplyNotificationService : NotificationListenerService() {
             if (sharedPreferences.getBoolean("is_bot_enabled", true)) {
                 val maxReply = sharedPreferences.getString("max_reply", "100")?.toIntOrNull() ?: 100
 
-                messageHandler.getAllMessagesBySender(title ?: "Unknown", platform) { messages ->
-                    if (messages.size < maxReply) {
-                        val groupReplyEnabled = sharedPreferences.getBoolean("is_group_reply_enabled", false)
+                messageHandler.getAllMessagesBySender(title ?: "Unknown", platform, object : MessageHandler.OnMessagesRetrievedListener {
+                    override fun onMessagesRetrieved(messages: List<Message>) {
+                        if (messages.size < maxReply) {
+                            val groupReplyEnabled = sharedPreferences.getBoolean("is_group_reply_enabled", false)
 
-                        if (groupReplyEnabled) {
-                            processAutoReply(sbn, title ?: "Unknown", senderMessage, messageId, platform)
-                        } else {
-                            if (!isGroupMessage(title)) {
+                            if (groupReplyEnabled) {
                                 processAutoReply(sbn, title ?: "Unknown", senderMessage, messageId, platform)
+                            } else {
+                                if (!isGroupMessage(title)) {
+                                    processAutoReply(sbn, title ?: "Unknown", senderMessage, messageId, platform)
+                                }
                             }
                         }
                     }
-                }
+                })
             }
         }
 
@@ -311,12 +313,12 @@ class AutoReplyNotificationService : NotificationListenerService() {
 
         val length = replyText.length
         return when {
-            length <= 20 -> 1000 + (length * 50)
-            length <= 100 -> 2000 + ((length - 20) * 25)
+            length <= 20 -> (1000 + (length * 50)).toLong()
+            length <= 100 -> (2000 + ((length - 20) * 25)).toLong()
             else -> {
                 val delay = 4000 + ((length - 100) * 40)
                 if (delay > 8000) 8000 else delay
-            }
+            }.toLong()
         }.coerceAtLeast(1000)
     }
 

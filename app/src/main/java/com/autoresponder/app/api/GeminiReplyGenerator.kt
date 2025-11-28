@@ -31,57 +31,61 @@ class GeminiReplyGenerator(
 
     fun generateReply(sender: String, message: String, platform: String, callback: (String) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            messageHandler.getMessagesHistory(sender, platform) { messages ->
-                try {
-                    val generativeModel = GenerativeModel(
-                        modelName = llmModel,
-                        apiKey = apiKey
-                    )
+            messageHandler.getMessagesHistory(sender, platform, object : MessageHandler.OnMessagesRetrievedListener {
+                override fun onMessagesRetrieved(messages: List<Message>) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            val generativeModel = GenerativeModel(
+                                modelName = llmModel,
+                                apiKey = apiKey
+                            )
 
-                    val systemInstruction = if (customPrompt.isNotEmpty()) {
-                        customPrompt
-                    } else {
-                        "You are a WhatsApp auto-reply bot. " +
-                        "Your task is to read the provided previous chat history and reply to the most recent incoming message. " +
-                        "Always respond in $aiReplyLanguage. Be polite, context-aware, and ensure your replies are relevant to the conversation."
+                            val systemInstruction = if (customPrompt.isNotEmpty()) {
+                                customPrompt
+                            } else {
+                                "You are a WhatsApp auto-reply bot. " +
+                                "Your task is to read the provided previous chat history and reply to the most recent incoming message. " +
+                                "Always respond in $aiReplyLanguage. Be polite, context-aware, and ensure your replies are relevant to the conversation."
+                            }
+
+                            // Build chat history for Gemini
+                            val chatHistory = messages.flatMap { msg: Message ->
+                                listOf(
+                                    content("user") { text("${msg.sender}: ${msg.message}") },
+                                    content("model") { text(msg.reply) }
+                                )
+                            }
+
+                            val chat = generativeModel.startChat(
+                                history = chatHistory
+                            )
+
+                            // Add system instruction as part of the prompt or context if the API doesn't support system roles directly in this version
+                            // For this version of the SDK, we can prepend the system instruction to the first message or the current prompt
+                            // But since we are using startChat, we can just send the message with context.
+                            
+                            // Note: 0.2.2 SDK might not support system instructions in startChat directly or might behave differently.
+                            // A common pattern is to include it in the prompt.
+                            
+                            val prompt = "$systemInstruction\n\nMost recent message from $sender: $message"
+                            
+                            // Since generateContent is a suspend function, we need to call it within the scope.
+                            val response = chat.sendMessage(prompt)
+                            val responseText = response.text
+
+                            if (responseText != null) {
+                                callback(responseText)
+                            } else {
+                                callback(defaultReplyMessage)
+                            }
+
+                        } catch (e: Exception) {
+                            Log.e(TAG, "generateReply: ", e)
+                            callback(defaultReplyMessage)
+                        }
                     }
-
-                    // Build chat history for Gemini
-                    val chatHistory = messages.flatMap { msg ->
-                        listOf(
-                            content("user") { text("${msg.sender}: ${msg.message}") },
-                            content("model") { text(msg.reply) }
-                        )
-                    }
-
-                    val chat = generativeModel.startChat(
-                        history = chatHistory
-                    )
-
-                    // Add system instruction as part of the prompt or context if the API doesn't support system roles directly in this version
-                    // For this version of the SDK, we can prepend the system instruction to the first message or the current prompt
-                    // But since we are using startChat, we can just send the message with context.
-                    
-                    // Note: 0.2.2 SDK might not support system instructions in startChat directly or might behave differently.
-                    // A common pattern is to include it in the prompt.
-                    
-                    val prompt = "$systemInstruction\n\nMost recent message from $sender: $message"
-                    
-                    // Since generateContent is a suspend function, we need to call it within the scope.
-                    val response = chat.sendMessage(prompt)
-                    val responseText = response.text
-
-                    if (responseText != null) {
-                        callback(responseText)
-                    } else {
-                        callback(defaultReplyMessage)
-                    }
-
-                } catch (e: Exception) {
-                    Log.e(TAG, "generateReply: ", e)
-                    callback(defaultReplyMessage)
                 }
-            }
+            })
         }
     }
 }

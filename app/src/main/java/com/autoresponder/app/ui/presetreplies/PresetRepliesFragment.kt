@@ -49,11 +49,15 @@ class PresetRepliesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        presetAdapter = PresetAdapter(presets) { preset ->
-            showEditPresetDialog(preset)
-        } { preset ->
-            showDeleteConfirmDialog(preset)
-        }
+        presetAdapter = PresetAdapter(
+            presets,
+            onEditClick = { preset ->
+                showEditPresetDialog(preset)
+            },
+            onDeleteClick = { preset ->
+                showDeleteConfirmDialog(preset)
+            }
+        )
 
         binding.presetsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.presetsRecyclerView.adapter = presetAdapter
