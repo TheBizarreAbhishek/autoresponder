@@ -33,7 +33,6 @@
             app:key="max_reply"
             app:title="Max Replies Per Person/Day"
             app:defaultValue="100"
-            android:inputType="number"
             app:useSimpleSummaryProvider="true" />
 
         <SwitchPreferenceCompat
@@ -48,7 +47,6 @@
             app:title="Custom Delay (seconds)"
             app:summary="Fixed delay for all replies (leave empty for natural delay)"
             app:defaultValue=""
-            android:inputType="numberDecimal"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
