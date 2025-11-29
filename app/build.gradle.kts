@@ -25,6 +25,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Use debug signing for CI builds (replace with proper signing for production)
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     
