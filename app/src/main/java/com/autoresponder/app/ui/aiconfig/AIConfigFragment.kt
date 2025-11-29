@@ -76,6 +76,11 @@ class AIConfigFragment : Fragment() {
             binding.llmModelAutocomplete.setText(llmModels[currentIndex], false)
         }
 
+        // Show dropdown when clicked
+        binding.llmModelAutocomplete.setOnClickListener {
+            binding.llmModelAutocomplete.showDropDown()
+        }
+
         binding.llmModelAutocomplete.setOnItemClickListener { _, _, position, _ ->
             val selectedValue = llmModelValues[position]
             sharedPreferences.edit().putString("llm_model", selectedValue).apply()
@@ -90,6 +95,11 @@ class AIConfigFragment : Fragment() {
 
         val currentLanguage = sharedPreferences.getString("ai_reply_language", "English") ?: "English"
         binding.aiLanguageAutocomplete.setText(currentLanguage, false)
+
+        // Show dropdown when clicked
+        binding.aiLanguageAutocomplete.setOnClickListener {
+            binding.aiLanguageAutocomplete.showDropDown()
+        }
 
         binding.aiLanguageAutocomplete.setOnItemClickListener { _, _, position, _ ->
             val selectedLanguage = languages[position]
