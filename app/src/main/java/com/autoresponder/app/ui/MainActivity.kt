@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setSupportActionBar(binding.toolbar)
 
-        navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as androidx.navigation.fragment.NavHostFragment
+        navController = navHostFragment.navController
         
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_dashboard, R.id.nav_platforms, R.id.nav_ai_config, R.id.nav_history, R.id.nav_settings, R.id.nav_about),
