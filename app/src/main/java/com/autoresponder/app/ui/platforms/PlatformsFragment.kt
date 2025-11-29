@@ -56,6 +56,12 @@ class PlatformsFragment : Fragment() {
         binding.telegramSwitch.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean("platform_telegram_enabled", isChecked).apply()
         }
+
+        // Twitter/X
+        binding.twitterSwitch.isChecked = sharedPreferences.getBoolean("platform_twitter_enabled", true)
+        binding.twitterSwitch.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("platform_twitter_enabled", isChecked).apply()
+        }
     }
 
     override fun onDestroyView() {

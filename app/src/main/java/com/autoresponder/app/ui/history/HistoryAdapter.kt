@@ -57,6 +57,7 @@ class HistoryAdapter(
                 "instagram" -> com.autoresponder.app.R.drawable.ic_instagram
                 "facebook" -> com.autoresponder.app.R.drawable.ic_facebook
                 "telegram" -> com.autoresponder.app.R.drawable.ic_telegram
+                "twitter" -> com.autoresponder.app.R.drawable.ic_twitter
                 else -> com.autoresponder.app.R.drawable.ic_service_status
             }
             binding.platformIcon.setImageResource(platformIcon)
