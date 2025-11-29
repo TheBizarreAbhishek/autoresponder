@@ -20,6 +20,7 @@ import com.autoresponder.app.R
 import com.autoresponder.app.helper.MessageHandler
 import com.autoresponder.app.helper.PlatformDetector
 import com.autoresponder.app.ui.MainActivity
+import com.autoresponder.app.model.Message
 import java.util.HashSet
 
 class AutoReplyNotificationService : NotificationListenerService() {
