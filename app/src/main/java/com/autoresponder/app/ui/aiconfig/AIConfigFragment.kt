@@ -69,6 +69,7 @@ class AIConfigFragment : Fragment() {
         
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, llmModels)
         binding.llmModelAutocomplete.setAdapter(adapter)
+        binding.llmModelAutocomplete.threshold = 1000 // Prevent filtering
 
         val currentModel = sharedPreferences.getString("llm_model", "gpt-4o-mini") ?: "gpt-4o-mini"
         val currentIndex = llmModelValues.indexOf(currentModel)
@@ -76,9 +77,12 @@ class AIConfigFragment : Fragment() {
             binding.llmModelAutocomplete.setText(llmModels[currentIndex], false)
         }
 
-        // Show dropdown when clicked
-        binding.llmModelAutocomplete.setOnClickListener {
-            binding.llmModelAutocomplete.showDropDown()
+        // Show dropdown when field is touched
+        binding.llmModelAutocomplete.setOnTouchListener { v, event ->
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                binding.llmModelAutocomplete.showDropDown()
+            }
+            false
         }
 
         binding.llmModelAutocomplete.setOnItemClickListener { _, _, position, _ ->
@@ -92,13 +96,17 @@ class AIConfigFragment : Fragment() {
         
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, languages)
         binding.aiLanguageAutocomplete.setAdapter(adapter)
+        binding.aiLanguageAutocomplete.threshold = 1000 // Prevent filtering
 
         val currentLanguage = sharedPreferences.getString("ai_reply_language", "English") ?: "English"
         binding.aiLanguageAutocomplete.setText(currentLanguage, false)
 
-        // Show dropdown when clicked
-        binding.aiLanguageAutocomplete.setOnClickListener {
-            binding.aiLanguageAutocomplete.showDropDown()
+        // Show dropdown when field is touched
+        binding.aiLanguageAutocomplete.setOnTouchListener { v, event ->
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                binding.aiLanguageAutocomplete.showDropDown()
+            }
+            false
         }
 
         binding.aiLanguageAutocomplete.setOnItemClickListener { _, _, position, _ ->
