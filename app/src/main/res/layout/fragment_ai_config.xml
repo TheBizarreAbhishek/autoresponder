@@ -180,8 +180,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Select LLM Model"
-                    app:startIconDrawable="@drawable/ic_model"
-                    app:startIconTint="@color/primary"
                     app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
@@ -240,8 +238,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Select Language"
-                    app:startIconDrawable="@drawable/ic_language"
-                    app:startIconTint="@color/primary"
                     app:endIconMode="dropdown_menu">
 
                     <AutoCompleteTextView
@@ -318,6 +314,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
 
