@@ -28,6 +28,17 @@ public class HomeFragment extends Fragment {
         updateServiceStatus();
         loadStats();
         loadCustomPrompt();
+        loadNaturalDelayStatus();
+    }
+
+    private void loadNaturalDelayStatus() {
+        SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext());
+        boolean isEnabled = prefs.getBoolean("is_natural_delay_enabled", false);
+        binding.switchNaturalDelay.setChecked(isEnabled);
+
+        binding.switchNaturalDelay.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean("is_natural_delay_enabled", isChecked).apply();
+        });
     }
 
     private void loadCustomPrompt() {

@@ -92,6 +92,26 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
     // ----------------------------------------------------------------------------------------------
 
+    private void finalizeAndSend(Notification.Action action, String sender, String incomingMessage,
+            String replyMessageRaw, String messageId) {
+        String replyPrefix = sharedPreferences
+                .getString("reply_prefix_message", getString(R.string.default_reply_prefix)).trim();
+        String botReplyMessage = (replyPrefix + " " + replyMessageRaw).trim();
+        String botReplyWithoutPrefix = botReplyMessage.replace(replyPrefix, "").trim();
+
+        long delay = 0;
+        if (sharedPreferences.getBoolean("is_natural_delay_enabled", false)) {
+            int wordCount = botReplyWithoutPrefix.split("\\s+").length;
+            delay = 1000 + (wordCount * 100L);
+        }
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            messageHandler.handleIncomingMessage(sender, incomingMessage, botReplyWithoutPrefix);
+            send(action, botReplyMessage);
+            new Handler(Looper.getMainLooper()).postDelayed(() -> respondedMessages.remove(messageId), 750);
+        }, delay);
+    }
+
     private void processAutoReply(StatusBarNotification statusBarNotification, String sender, String message,
             String messageId) {
 
@@ -104,68 +124,34 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 // Here is validating sender's message. Not whatsapp checking for messages
                 if (action.getRemoteInputs() != null && action.getRemoteInputs().length > 0) {
 
-                    // ..............................................................................
-
-                    String replyPrefix = sharedPreferences
-                            .getString("reply_prefix_message", getString(R.string.default_reply_prefix)).trim();
-
                     if (isAIConfigured()) {
 
                         String llmModel = sharedPreferences.getString("llm_model", "gpt-4o-mini").toLowerCase();
 
                         if (llmModel.startsWith("gpt")) {
-
                             ChatGPTReplyGenerator chatGPTReplyGenerator = new ChatGPTReplyGenerator(this,
                                     sharedPreferences, messageHandler);
-
-                            chatGPTReplyGenerator.generateReply(sender, message, reply -> {
-                                botReplyMessage = replyPrefix + " " + reply;
-                                String botReplyWithoutPrefix = botReplyMessage.replace(replyPrefix, "").trim();
-                                messageHandler.handleIncomingMessage(sender, message, botReplyWithoutPrefix);
-                                send(action, botReplyMessage);
-                                new Handler(Looper.getMainLooper())
-                                        .postDelayed(() -> respondedMessages.remove(messageId), 750);
-                            });
+                            chatGPTReplyGenerator.generateReply(sender, message,
+                                    reply -> finalizeAndSend(action, sender, message, reply, messageId));
 
                         } else if (llmModel.startsWith("custom")) {
-
                             CustomReplyGenerator customReplyGenerator = new CustomReplyGenerator(this,
                                     sharedPreferences, messageHandler);
-
-                            customReplyGenerator.generateReply(sender, message, reply -> {
-                                botReplyMessage = replyPrefix + " " + reply;
-                                String botReplyWithoutPrefix = botReplyMessage.replace(replyPrefix, "").trim();
-                                messageHandler.handleIncomingMessage(sender, message, botReplyWithoutPrefix);
-                                send(action, botReplyMessage);
-                                new Handler(Looper.getMainLooper())
-                                        .postDelayed(() -> respondedMessages.remove(messageId), 750);
-                            });
+                            customReplyGenerator.generateReply(sender, message,
+                                    reply -> finalizeAndSend(action, sender, message, reply, messageId));
 
                         } else if (llmModel.startsWith("gemini")) {
-
                             GeminiReplyGenerator geminiReplyGenerator = new GeminiReplyGenerator(this,
                                     sharedPreferences, messageHandler);
-
-                            geminiReplyGenerator.generateReply(sender, message, reply -> {
-                                botReplyMessage = replyPrefix + " " + reply;
-                                String botReplyWithoutPrefix = botReplyMessage.replace(replyPrefix, "").trim();
-                                messageHandler.handleIncomingMessage(sender, message, botReplyWithoutPrefix);
-                                send(action, botReplyMessage);
-                                new Handler(Looper.getMainLooper())
-                                        .postDelayed(() -> respondedMessages.remove(messageId), 750);
-                            });
+                            geminiReplyGenerator.generateReply(sender, message,
+                                    reply -> finalizeAndSend(action, sender, message, reply, messageId));
                         }
 
                     } else {
-                        botReplyMessage = (replyPrefix + " " + sharedPreferences.getString("default_reply_message",
-                                getString(R.string.default_bot_message))).trim();
-                        String botReplyWithoutPrefix = botReplyMessage.replace(replyPrefix, "").trim();
-                        messageHandler.handleIncomingMessage(sender, message, botReplyWithoutPrefix);
-                        send(action, botReplyMessage);
-                        new Handler().postDelayed(() -> respondedMessages.remove(messageId), 750);
+                        String defaultReply = sharedPreferences.getString("default_reply_message",
+                                getString(R.string.default_bot_message));
+                        finalizeAndSend(action, sender, message, defaultReply, messageId);
                     }
-
-                    // ..............................................................................
 
                     break;
                 }
