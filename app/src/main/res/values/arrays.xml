@@ -22,6 +22,7 @@
 
     <string-array name="languages">
         <item>English</item>
+        <item>Hinglish</item>
         <item>Hindi</item>
         <item>Bengali</item>
         <item>Chinese</item>

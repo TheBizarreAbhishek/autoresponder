@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.thebizarreabhishek.app.databinding.FragmentHomeBinding;
 import com.thebizarreabhishek.app.helpers.NotificationHelper;
+import android.app.AlertDialog;
+import com.thebizarreabhishek.app.R;
 
 public class HomeFragment extends Fragment {
 
@@ -55,24 +57,20 @@ public class HomeFragment extends Fragment {
         binding.cardBotName
                 .setOnClickListener(v -> showEditTextDialog("Bot Name", "bot_name", botName, binding.tvBotNameValue));
 
-        // Bot Language
-        String language = prefs.getString("bot_language", "English");
-        int chipId = com.thebizarreabhishek.app.R.id.chip_english;
-        if (language.equals("Hindi"))
-            chipId = com.thebizarreabhishek.app.R.id.chip_hindi;
-        else if (language.equals("Hinglish"))
-            chipId = com.thebizarreabhishek.app.R.id.chip_hinglish;
+        // Bot Language Selection
+        String currentLanguage = prefs.getString("bot_language", "English");
+        binding.chipBotLanguage.setText(currentLanguage);
 
-        binding.chipGroupLanguage.check(chipId);
-
-        binding.chipGroupLanguage.setOnCheckedChangeListener((group, checkedId) -> {
-            String selectedLang = "English";
-            if (checkedId == com.thebizarreabhishek.app.R.id.chip_hindi)
-                selectedLang = "Hindi";
-            else if (checkedId == com.thebizarreabhishek.app.R.id.chip_hinglish)
-                selectedLang = "Hinglish";
-
-            prefs.edit().putString("bot_language", selectedLang).apply();
+        binding.chipBotLanguage.setOnClickListener(v -> {
+            String[] languages = getResources().getStringArray(R.array.languages);
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Select Bot Language")
+                    .setItems(languages, (dialog, which) -> {
+                        String selectedLanguage = languages[which];
+                        binding.chipBotLanguage.setText(selectedLanguage);
+                        prefs.edit().putString("bot_language", selectedLanguage).apply();
+                    })
+                    .show();
         });
     }
 

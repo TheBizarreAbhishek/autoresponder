@@ -388,42 +388,25 @@
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chip_group_language"
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_bot_language"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    app:singleSelection="true"
-                    app:selectionRequired="true">
+                    android:text="English"
+                    android:checkable="false"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/surface_variant"/>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_english"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="English"
-                        android:checkable="true"
-                        android:textColor="@color/white"
-                        app:chipBackgroundColor="@color/surface_variant"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_hindi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hindi"
-                        android:checkable="true"
-                        android:textColor="@color/white"
-                        app:chipBackgroundColor="@color/surface_variant"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_hinglish"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hinglish"
-                        android:checkable="true"
-                        android:textColor="@color/white"
-                        app:chipBackgroundColor="@color/surface_variant"/>
-                        
-                </com.google.android.material.chip.ChipGroup>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Tap to select the language for bot replies"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
