@@ -59,8 +59,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:scaleX="1.5"
-                    android:scaleY="1.5"
                     app:thumbTint="@color/white"
                     app:trackTint="@color/white"/>
 
@@ -112,9 +110,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_replies_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="124"
+                        android:text="0"
                         android:textColor="@color/on_surface"
                         android:textSize="32sp"
                         android:textStyle="bold"
@@ -158,9 +157,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_saved_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2hrs"
+                        android:text="0m"
                         android:textColor="@color/on_surface"
                         android:textSize="32sp"
                         android:textStyle="bold"
