@@ -31,6 +31,8 @@
         app:itemPaddingTop="10dp"
         app:itemPaddingBottom="10dp"
         app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
