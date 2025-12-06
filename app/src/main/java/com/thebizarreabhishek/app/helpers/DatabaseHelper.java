@@ -27,14 +27,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TIMESTAMP = "timestamp";
     public static final String COLUMN_REPLY = "reply";
 
-    private static final String TABLE_CREATE =
-            "CREATE TABLE " + TABLE_MESSAGES + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_SENDER + " TEXT, " +
-                    COLUMN_MESSAGE + " TEXT, " +
-                    COLUMN_TIMESTAMP + " TEXT, " +
-                    COLUMN_REPLY + " TEXT" +
-                    ");";
+    private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_MESSAGES + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_SENDER + " TEXT, " +
+            COLUMN_MESSAGE + " TEXT, " +
+            COLUMN_TIMESTAMP + " TEXT, " +
+            COLUMN_REPLY + " TEXT" +
+            ");";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,14 +46,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        if (oldVersion < 2) {
-//            db.execSQL("ALTER TABLE " + TABLE_MESSAGES + " ADD COLUMN " + COLUMN_REPLY + " TEXT;");
-//        }
+        // if (oldVersion < 2) {
+        // db.execSQL("ALTER TABLE " + TABLE_MESSAGES + " ADD COLUMN " + COLUMN_REPLY +
+        // " TEXT;");
+        // }
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
         onCreate(db);
     }
 
-//    ----------------------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------------------------
 
     public void insertMessage(String sender, String message, String timestamp, String reply) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             @SuppressLint("SimpleDateFormat")
             String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             String whereClause = COLUMN_TIMESTAMP + " < ?";
-            String[] whereArgs = {currentDate + " 00:00:00"};
+            String[] whereArgs = { currentDate + " 00:00:00" };
             db.delete(TABLE_MESSAGES, whereClause, whereArgs);
         } catch (Exception e) {
             // Log the exception
@@ -85,7 +85,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
-
 
     public List<Message> getChatHistoryBySender(String sender) {
         List<Message> messages = new ArrayList<>();
@@ -98,7 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String query = "SELECT * FROM " + TABLE_MESSAGES + " WHERE " + COLUMN_SENDER + " = ? " +
                     "ORDER BY " + COLUMN_TIMESTAMP + " DESC LIMIT 7";
-            cursor = db.rawQuery(query, new String[]{sender});
+            cursor = db.rawQuery(query, new String[] { sender });
 
             if (cursor.moveToFirst()) {
                 do {
@@ -136,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String query = "SELECT * FROM " + TABLE_MESSAGES + " WHERE " + COLUMN_SENDER + " = ? " +
                     "ORDER BY " + COLUMN_TIMESTAMP + " DESC";
-            cursor = db.rawQuery(query, new String[]{sender});
+            cursor = db.rawQuery(query, new String[] { sender });
 
             if (cursor.moveToFirst()) {
                 do {
@@ -160,6 +159,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
+        return messages;
+    }
+
+    public List<Message> getAllMessages() {
+        List<Message> messages = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            String query = "SELECT * FROM " + TABLE_MESSAGES + " ORDER BY " + COLUMN_TIMESTAMP + " DESC";
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+                    String sender = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SENDER));
+                    String message = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_MESSAGE));
+                    String timestamp = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIMESTAMP));
+                    String reply = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_REPLY));
+
+                    Message msg = new Message(id, sender, message, timestamp, reply);
+                    messages.add(msg);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getAllMessages: ", e);
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            if (db != null && db.isOpen())
+                db.close();
+        }
         return messages;
     }
 }
