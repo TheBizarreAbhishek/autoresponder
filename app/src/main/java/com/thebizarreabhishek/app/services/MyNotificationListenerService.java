@@ -148,7 +148,8 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
                         String llmModel = sharedPreferences.getString("llm_model", "gpt-4o-mini").toLowerCase();
 
-                        if (llmModel.startsWith("gpt")) {
+                        if (llmModel.startsWith("gpt") || llmModel.startsWith("deepseek")
+                                || llmModel.startsWith("grok") || llmModel.startsWith("o1")) {
                             ChatGPTReplyGenerator chatGPTReplyGenerator = new ChatGPTReplyGenerator(this,
                                     sharedPreferences, messageHandler);
                             chatGPTReplyGenerator.generateReply(sender, message,
