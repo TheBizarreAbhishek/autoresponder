@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment {
         prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
 
         setupThemeToggle();
-        setupBatteryOptimization();
+
         setupGeneralSettings();
         setupAIEngine();
         setupAPIKey();
@@ -107,35 +107,6 @@ public class SettingsFragment extends Fragment {
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
-    }
-
-    private void setupBatteryOptimization() {
-        binding.btnBatteryIgnore.setOnClickListener(v -> {
-            try {
-                android.content.Intent intent = new android.content.Intent();
-                String packageName = requireContext().getPackageName();
-                android.os.PowerManager pm = (android.os.PowerManager) requireContext()
-                        .getSystemService(Context.POWER_SERVICE);
-
-                if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
-                    intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(android.net.Uri.parse("package:" + packageName));
-                    startActivity(intent);
-                } else {
-                    android.widget.Toast.makeText(requireContext(), "Battery optimization already ignored (Allowed)",
-                            android.widget.Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                // Fallback to general settings if permission denied or other error
-                try {
-                    startActivity(new android.content.Intent(
-                            android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS));
-                } catch (Exception ex) {
-                    android.widget.Toast.makeText(requireContext(), "Could not open battery settings",
-                            android.widget.Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void setupAIEngine() {
