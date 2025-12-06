@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Brand Colors -->
-    <color name="primary">#2563EB</color> <!-- Bright Royal Blue -->
-    <color name="on_primary">#FFFFFF</color>
-    <color name="primary_container">#DBEAFE</color>
-    <color name="on_primary_container">#1E3A8A</color>
+    <color name="primary">#1DB954</color> <!-- Spotify Green -->
+    <color name="on_primary">#000000</color>
+    <color name="primary_container">#121212</color>
+    <color name="on_primary_container">#1DB954</color>
 
-    <!-- Secondary Colors (Teal/Green accents) -->
-    <color name="secondary">#0D9488</color> <!-- Teal 600 -->
-    <color name="on_secondary">#FFFFFF</color>
-    <color name="secondary_container">#CCFBF1</color>
-    <color name="on_secondary_container">#115E59</color>
+    <!-- Secondary Colors -->
+    <color name="secondary">#1DB954</color>
+    <color name="on_secondary">#000000</color>
+    <color name="secondary_container">#000000</color>
+    <color name="on_secondary_container">#1DB954</color>
 
     <!-- Backgrounds -->
-    <color name="background">#F8FAFC</color> <!-- Slate 50 -->
-    <color name="on_background">#0F172A</color> <!-- Slate 900 -->
-    <color name="surface">#FFFFFF</color>
-    <color name="on_surface">#0F172A</color>
-    <color name="surface_variant">#F1F5F9</color> <!-- Slate 100 -->
-    <color name="on_surface_variant">#475569</color> <!-- Slate 600 -->
+    <color name="background">#000000</color> <!-- AMOLED Black -->
+    <color name="on_background">#FFFFFF</color>
+    <color name="surface">#121212</color>
+    <color name="on_surface">#FFFFFF</color>
+    <color name="surface_variant">#282828</color>
+    <color name="on_surface_variant">#B3B3B3</color>
 
     <!-- Status Colors -->
-    <color name="success">#22C55E</color>
-    <color name="error">#EF4444</color>
+    <color name="success">#1DB954</color>
+    <color name="error">#E91429</color>
     
     <!-- Gradients -->
-    <color name="gradient_start">#3B82F6</color>
-    <color name="gradient_end">#10B981</color>
+    <color name="gradient_start">#1DB954</color>
+    <color name="gradient_end">#191414</color>
     
     <!-- Text Colors -->
-    <color name="text_primary">#1E293B</color>
-    <color name="text_secondary">#64748B</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
     
     <!-- Other -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="purple_500">#6200EE</color> <!-- Keeping legacy just in case -->
+    <color name="purple_500">#6200EE</color>
 </resources>
