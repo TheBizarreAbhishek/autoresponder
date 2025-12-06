@@ -40,7 +40,24 @@ public class MyNotificationListenerService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification statusBarNotification) {
         super.onNotificationPosted(statusBarNotification);
 
-        if (statusBarNotification.getPackageName().equalsIgnoreCase("com.whatsapp")) {
+        String packageName = statusBarNotification.getPackageName();
+        boolean isSupported = false;
+
+        if (packageName.equalsIgnoreCase("com.whatsapp") && sharedPreferences.getBoolean("is_whatsapp_enabled", true))
+            isSupported = true;
+        else if (packageName.equals("org.telegram.messenger")
+                && sharedPreferences.getBoolean("is_telegram_enabled", false))
+            isSupported = true;
+        else if (packageName.equals("com.instagram.android")
+                && sharedPreferences.getBoolean("is_instagram_enabled", false))
+            isSupported = true;
+        else if (packageName.equals("com.snapchat.android")
+                && sharedPreferences.getBoolean("is_snapchat_enabled", false))
+            isSupported = true;
+        else if (packageName.equals("com.twitter.android") && sharedPreferences.getBoolean("is_twitter_enabled", false))
+            isSupported = true;
+
+        if (isSupported) {
 
             Bundle extras = statusBarNotification.getNotification().extras;
             String messageId = statusBarNotification.getKey();

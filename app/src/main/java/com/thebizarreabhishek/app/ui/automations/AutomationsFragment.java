@@ -26,6 +26,33 @@ public class AutomationsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext());
+
+        // WhatsApp (Default True)
+        setupToggle(prefs, binding.switchWhatsapp, "is_whatsapp_enabled", true);
+
+        // Telegram
+        setupToggle(prefs, binding.switchTelegram, "is_telegram_enabled", false);
+
+        // Instagram
+        setupToggle(prefs, binding.switchInstagram, "is_instagram_enabled", false);
+
+        // Snapchat
+        setupToggle(prefs, binding.switchSnapchat, "is_snapchat_enabled", false);
+
+        // Twitter/X
+        setupToggle(prefs, binding.switchTwitter, "is_twitter_enabled", false);
+    }
+
+    private void setupToggle(SharedPreferences prefs, com.google.android.material.switchmaterial.SwitchMaterial toggle,
+            String key, boolean defaultValue) {
+        toggle.setChecked(prefs.getBoolean(key, defaultValue));
+        toggle.setOnCheckedChangeListener((buttonView, isChecked) -> prefs.edit().putBoolean(key, isChecked).apply());
+    }
+
     private void setupSwitches() {
         // Busy Mode
         binding.switchBusy.setChecked(prefs.getBoolean("auto_busy_mode", false));
