@@ -62,7 +62,7 @@ public class SettingsFragment extends Fragment {
 
     private void setupGeneralSettings() {
         // Default Reply
-        String defaultReply = prefs.getString("default_reply_message", "I am busy right now, will talk to you later.");
+        String defaultReply = prefs.getString("default_reply_message", getString(R.string.default_bot_message));
         binding.tvDefaultReply.setText(defaultReply);
         binding.containerDefaultReply.setOnClickListener(v -> showEditTextDialog("Default Reply Message",
                 "default_reply_message", defaultReply, binding.tvDefaultReply));
