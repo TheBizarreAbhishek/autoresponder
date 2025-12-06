@@ -31,16 +31,32 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadCustomPrompt() {
-        SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String savedPrompt = prefs.getString("custom_prompt", "You are a helpful AI assistant.");
-        binding.etCustomPrompt.setText(savedPrompt);
+        binding.cardCustomPrompt.setOnClickListener(v -> showCustomPromptPopup());
+    }
 
-        binding.btnSavePrompt.setOnClickListener(v -> {
-            String newPrompt = binding.etCustomPrompt.getText().toString();
+    private void showCustomPromptPopup() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(requireContext());
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(com.thebizarreabhishek.app.R.layout.dialog_custom_prompt, null);
+        builder.setView(dialogView);
+
+        com.google.android.material.textfield.TextInputEditText etPrompt = dialogView
+                .findViewById(com.thebizarreabhishek.app.R.id.et_dialog_prompt);
+        SharedPreferences prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String savedPrompt = prefs.getString("custom_prompt", "You are a friendly AI assistant.");
+        etPrompt.setText(savedPrompt);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String newPrompt = etPrompt.getText().toString();
             prefs.edit().putString("custom_prompt", newPrompt).apply();
             android.widget.Toast.makeText(requireContext(), "Behavior Saved!", android.widget.Toast.LENGTH_SHORT)
                     .show();
         });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void loadStats() {
