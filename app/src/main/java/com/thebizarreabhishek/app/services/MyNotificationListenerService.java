@@ -41,6 +41,7 @@ public class MyNotificationListenerService extends NotificationListenerService {
         super.onNotificationPosted(statusBarNotification);
 
         String packageName = statusBarNotification.getPackageName();
+        Log.d(TAG, "onNotificationPosted: packageName=" + packageName);
         boolean isSupported = false;
 
         if (packageName.equalsIgnoreCase("com.whatsapp") && sharedPreferences.getBoolean("is_whatsapp_enabled", true))
@@ -80,7 +81,9 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
                 String senderMessage = text.toString();
 
-                if (sharedPreferences.getBoolean("is_bot_enabled", true)) {
+                boolean isBotEnabled = sharedPreferences.getBoolean("is_bot_enabled", true);
+                Log.d(TAG, "onNotificationPosted: isBotEnabled=" + isBotEnabled);
+                if (isBotEnabled) {
 
                     int maxReply = Integer.parseInt(sharedPreferences.getString("max_reply", "100"));
 
@@ -144,7 +147,9 @@ public class MyNotificationListenerService extends NotificationListenerService {
                 // Here is validating sender's message. Not whatsapp checking for messages
                 if (action.getRemoteInputs() != null && action.getRemoteInputs().length > 0) {
 
-                    if (isAIConfigured()) {
+                    boolean aiConfigured = isAIConfigured();
+                    Log.d(TAG, "processAutoReply: isAIConfigured=" + aiConfigured);
+                    if (aiConfigured) {
 
                         String llmModel = sharedPreferences.getString("llm_model", "gpt-4o-mini").toLowerCase();
 
@@ -244,8 +249,11 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
     private boolean isAIConfigured() {
         boolean isAIConfigured = false;
-        if (sharedPreferences.getBoolean("is_ai_reply_enabled", false)) {
-            if (!sharedPreferences.getString("api_key", "").isEmpty()) {
+        boolean aiReplyEnabled = sharedPreferences.getBoolean("is_ai_reply_enabled", false);
+        String apiKey = sharedPreferences.getString("api_key", "");
+        Log.d(TAG, "isAIConfigured: is_ai_reply_enabled=" + aiReplyEnabled + ", api_key_length=" + apiKey.length());
+        if (aiReplyEnabled) {
+            if (!apiKey.isEmpty()) {
                 isAIConfigured = true;
             }
         }
